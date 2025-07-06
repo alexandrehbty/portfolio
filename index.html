@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexandre Huberty - Mon Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS pour un contrôle facile du thème */
+        :root {
+            --primary-accent-color: #DAA520; /* Or antique pour l'accentuation */
+            --secondary-accent-color: #8B4513; /* Marron terre pour les détails subtils */
+            --dark-bg-color: #1C1C1C; /* Fond très sombre */
+            --dark-surface-color: #282828; /* Surfaces des cartes, header, etc. */
+            --text-color-light: #F0F0F0; /* Texte clair sur fond sombre */
+            --text-color-muted: #A8A8A8; /* Texte secondaire/gris */
+            --border-color: #404040; /* Bordures subtiles */
+            --font-body: 'Montserrat', sans-serif;
+            --font-heading: 'Merriweather', serif;
+        }
+
+        /* Réinitialisation de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--text-color-light);
+            background-color: var(--dark-bg-color);
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-accent-color);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--secondary-accent-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1100px; /* Légèrement plus étroit pour un look plus dense */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Header / Navigation --- */
+        .main-header {
+            background-color: var(--dark-surface-color);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2em;
+            color: var(--text-color-light);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links ul {
+            display: flex;
+        }
+
+        .nav-links a {
+            color: var(--text-color-light);
+            padding: 8px 16px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-accent-color);
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: calc(100% - 32px);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-accent-color);
+            transform: translateY(-2px);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            height: 2.5px;
+            width: 24px;
+            background-color: var(--text-color-light);
+            margin-bottom: 4px;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://via.placeholder.com/1600x900/2a2a2a/EBEBEB?text=Votre+Image+de+Fond') no-repeat center center/cover;
+            color: var(--text-color-light);
+            text-align: center;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            position: relative;
+            overflow: hidden;
+            background-attachment: fixed; /* Effet Parallax */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-heading);
+            font-size: 3.8em;
+            margin-bottom: 12px;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+            letter-spacing: 0.8px;
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-accent-color);
+            color: var(--dark-bg-color);
+            padding: 12px 28px;
+            border-radius: 4px; /* Carré ou légèrement arrondi */
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+            border: none;
+            text-transform: uppercase;
+            font-size: 0.95em;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        /* --- Sections Générales --- */
+        section {
+            padding: 90px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        section:nth-of-type(even) {
+            background-color: var(--dark-surface-color);
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 2.8em;
+            color: var(--text-color-light);
+            margin-bottom: 45px;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0.7px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 2.5px;
+            background-color: var(--primary-accent-color);
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 1px;
+        }
+
+        /* --- À Propos --- */
+        #about .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #about .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-accent-color);
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2), 0 6px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        #about .profile-img:hover {
+            transform: scale(1.03);
+        }
+
+        #about .about-text {
+            text-align: left;
+            font-size: 1em;
+            line-height: 1.8;
+            color: var(--text-color-muted);
+            max-width: 700px;
+        }
+        
+        #about .about-text p:not(:last-child) {
+            margin-bottom: 15px;
+        }
+
+        /* --- Compétences --- */
+        #skills .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .skill-item {
+            background-color: var(--dark-surface-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border-color: var(--primary-accent-color);
+        }
+
+        .skill-item img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            /* Pas de filtre ici pour conserver les couleurs originales des logos */
+        }
+
+        .skill-item h3 {
+            font-size: 1.4em;
+            color: var(--text-color-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .skill-item p {
+            color: var(--text-color-muted);
+            font-size: 0.9em;
+        }
+
+        /* --- Portfolio --- */
+        #portfolio .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .portfolio-item {
+            background-color: var(--dark-surface-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border-color: var(--primary-accent-color);
+        }
+
+        .portfolio-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.02);
+        }
+
+        .portfolio-info {
+            padding: 22px;
+            text-align: left;
+        }
+
+        .portfolio-info h3 {
+            font-size: 1.6em;
+            color: var(--text-color-light);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .portfolio-info p {
+            color: var(--text-color-muted);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .portfolio-info .tags {
+            font-size: 0.8em;
+            color: var(--primary-accent-color);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .portfolio-info .btn-small {
+            margin-top: 12px;
+            padding: 8px 18px;
+            font-size: 0.8em;
+            border-radius: 3px;
+        }
+
+        /* --- Contact --- */
+        #contact .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--dark-surface-color);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.4);
+            text-align: left;
+            border: 1px solid var(--border-color);
+            display: none
+        }
+
+        #contact .form-group {
+            margin-bottom: 20px;
+        }
+
+        #contact label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-color-light);
+            font-size: 1em;
+        }
+
+        #contact input[type="text"],
+        #contact input[type="email"],
+        #contact textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--dark-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 0.95em;
+            color: var(--text-color-light);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #contact input[type="text"]:focus,
+        #contact input[type="email"]:focus,
+        #contact textarea:focus {
+            outline: none;
+            border-color: var(--primary-accent-color);
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+        }
+
+        #contact textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        #contact button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-accent-color);
+            color: var(--dark-bg-color);
+            border: none;
+            border-radius: 4px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        #contact button:hover {
+            background-color: var(--secondary-accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .social-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+        }
+        .social-links img {
+            width: 38px;
+            height: 38px;
+            /* Pas de filtre ici pour conserver les couleurs originales des logos */
+        }
+
+
+        /* --- Footer --- */
+        .main-footer {
+            background-color: var(--dark-surface-color);
+            color: var(--text-color-muted);
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.85em;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .main-footer p {
+            margin-bottom: 10px;
+        }
+
+        .main-footer .footer-nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .main-footer .footer-nav a {
+            color: var(--text-color-muted);
+            transition: color 0.3s ease;
+        }
+
+        .main-footer .footer-nav a:hover {
+            color: var(--primary-accent-color);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+            .nav-links ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 64px; /* Hauteur du header */
+                left: 0;
+                width: 100%;
+                background-color: var(--dark-surface-color);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+                border-top: 1px solid var(--border-color);
+                padding: 10px 0;
+                transition: transform 0.3s ease-out;
+                transform: translateY(-100%);
+            }
+
+            .nav-links.active ul {
+                display: flex;
+                transform: translateY(0);
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 10px 0;
+                text-align: center;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .nav-links a::after {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            #hero {
+                padding: 80px 15px;
+                min-height: 70vh;
+            }
+            .hero-content h1 {
+                font-size: 3em;
+            }
+            .hero-content p {
+                font-size: 1.1em;
+            }
+
+            h2 {
+                font-size: 2.4em;
+            }
+
+            #about .about-content {
+                gap: 25px;
+            }
+
+            #skills .skills-grid,
+            #portfolio .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+            .contact-form {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+            .hero-content p {
+                font-size: 1em;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            .skill-item, .portfolio-item {
+                padding: 20px;
+            }
+            .portfolio-info h3 {
+                font-size: 1.4em;
+            }
+            .contact-form {
+                padding: 25px 15px;
+            }
+            .social-links {
+                gap: 12px;
+            }
+            .social-links img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.6em;
+            }
+            .hero-content h1 {
+                font-size: 2em;
+            }
+            .hero-content p {
+                font-size: 0.9em;
+            }
+            h2 {
+                font-size: 1.7em;
+                margin-bottom: 20px;
+            }
+            h2::after {
+                width: 35px;
+                bottom: -10px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.8em;
+            }
+            section {
+                padding: 40px 0;
+            }
+            #skills .skills-grid,
+            #portfolio .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            .skill-item h3 {
+                font-size: 1.2em;
+            }
+            .portfolio-info h3 {
+                font-size: 1.2em;
+            }
+            #contact label {
+                font-size: 0.9em;
+            }
+            #contact input, #contact textarea {
+                padding: 10px;
+            }
+            #contact button {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+            .main-footer p {
+                font-size: 0.75em;
+            }
+            .main-footer .footer-nav ul {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container navbar">
+            <a href="#" class="logo">Mon Portfolio</a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="nav-links" id="nav-menu">
+                <ul>
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#about">À Propos</a></li>
+                    <li><a href="#skills">Compétences</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Alexandre Huberty</h1>
+                <p>Développeur Créatif | Analyse de Données | E-commerce </p>
+                <a href="#portfolio" class="btn">Découvrir mes Projets</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>À Propos de Moi</h2>
+                <div class="about-content">
+                    <img src="assets/img/Votre texte de paragraphe.png" alt="Votre photo de profil" class="profile-img">
+                    <div class="about-text">
+                        <p>Passionné par le Marketing Digital et l'E-commerce, j'aime analyser des données et optimiser les performances en ligne. La communication digitale et la gestion des réseaux sociaux m'attire également.</p>
+                        <p>Mon approche est guidée par la recherche du résultats et de l'optimisation d'une expérience utilisateur adapté. J'aime transformer les idées complexes en produits fonctionnels et esthétiques, en mettant l'accent sur l'agréabilité.</p>
+                        <p>Parcourez mes réalisations et n'hésitez pas à me contacter pour toute collaboration ou question !</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <h2>Mes Compétences</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <img src="assets/img/logo_html5.png" alt="HTML5">
+                        <h3>HTML5</h3>
+                        <p>Maîtrise des standards web et sémantique.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_css3.svg" alt="CSS3">
+                        <h3>CSS3</h3>
+                        <p>Stylisation avancée et responsive design.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_java_script.png" alt="JavaScript">
+                        <h3>JavaScript</h3>
+                        <p>Développement interactif et dynamique.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_java.svg" alt="Java">
+                        <h3>Java</h3>
+                        <p>Développement backend et scripts.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_google_analytics_2.png" alt="Google Analytics">
+                        <h3>Google Analytics</h3>
+                        <p>Conteneurisation et déploiement.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_google_ads_2.png" alt="Google Ads">
+                        <h3>Google Ads</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_looker_studio_2.svg" alt="Looker Studio">
+                        <h3>Looker Studio</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_google_gemini.png" alt="Gemini">
+                        <h3>Gemini</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_microsoft_365.svg" alt="Microsoft Office 365">
+                        <h3>Microsoft Office 365</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_shopify.png" alt="Shopify">
+                        <h3>Shopify</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_adobe_photoshop.png" alt="Photoshop">
+                        <h3>Photoshop</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="assets/img/logo_adobe_premiere_pro.png" alt="Première Pro">
+                        <h3>Première Pro</h3>
+                        <p>Prototypage et wireframing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio">
+            <div class="container">
+                <h2>Mes Projets</h2>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item">
+                        <img src="assets/img/logo_vayler_4.png" alt="Projet 1">
+                        <div class="portfolio-info">
+                            <h3>Vayler sneakers</h3>
+                            <p>Développement de la marque de sneakers Vayler. Conception et réalisation d'un site e-commerce complet avec une architecture front-end.​</p>
+                            <p class="tags"> #Vayler #VaylerSneakers</p>
+                            <a href="https://alexandrehbty.github.io/vayler/" class="btn btn-small">Voir le projet</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="assets/img/logo_cybertek.png" alt="Projet 2">
+                        <div class="portfolio-info">
+                            <h3>Nom du Projet 2</h3>
+                            <p>Analyse des performances marketing du site Cybertek.fr et création d'un rapport pour le moi de novembre et de décembre 2023.</p>
+                            <p class="tags">#Cybertek #Data #Kpi's</p>
+                            <a href="#" class="btn btn-small">Voir le projet</a>
+                        </div>
+                    </div>
+                    <div class="portfolio-item">
+                        <img src="assets/img/logo_travail_en_cours.png" alt="Projet N°3">
+                        <div class="portfolio-info">
+                            <h3>Projet n°3</h3>
+                            <p>Projet n°3 : Actuellement en phase de conception. Un nouveau défi stimulant dont les détails seront révélés très prochainement.</p>
+                            <p class="tags">#surprise #endéveloppement #skin...</p>
+                            <a href="#" class="btn btn-small">Voir le projet</a>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Me Contacter</h2>
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nom Complet</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Adresse Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Sujet</label>
+                        <input type="text" id="subject" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Votre Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit">Envoyer le Message</button>
+                </form>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/alexandre-huberty" target="_blank" aria-label="LinkedIn">
+                        <img src="https://img.icons8.com/color/40/000000/linkedin.png" alt="LinkedIn">
+                    </a>
+                    <a href="https://github.com/alexandrehbty" target="_blank" aria-label="GitHub">
+                        <img src="https://img.icons8.com/ios-filled/40/000000/github.png" alt="GitHub">
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Alexandre Huberty. Tous droits réservés.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = document.querySelectorAll('#nav-menu a');
+
+            // Toggle mobile menu
+            mobileMenu.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+
+            // Close mobile menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
