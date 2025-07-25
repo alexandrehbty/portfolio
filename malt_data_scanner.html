@@ -6,12 +6,12 @@
     
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self'; 
-        script-src 'self' https://pyscript.net; 
+        script-src 'self' https://pyscript.net 'unsafe-eval'; 
         style-src 'self' 'unsafe-inline' https://pyscript.net https://fonts.googleapis.com; 
         font-src https://fonts.gstatic.com;
         connect-src https://api.allorigins.win;
         img-src 'self' data:;
-        worker-src blob:; 
+        worker-src 'self' blob:; 
     ">
     <title>Alexandre Huberty - Analyseur de Données Python</title>
     
@@ -27,19 +27,10 @@
         src="https://pyscript.net/releases/2024.1.1/core.js"
         integrity="sha384-OkQu2sQfPyPS0Ipm5a9E59eW2+2fjpWj22p2hGv4TcF5jC1jPAfP+3sC8M9zDRjH"
         crossorigin="anonymous"></script>
+    
     <style>
-        /* === DÉBUT DE LA FEUILLE DE STYLE COMPLÈTE (COPIÉE DE VOTRE index.html) === */
-        :root {
-            --primary-accent-color: #DAA520; /* Or antique pour l'accentuation */
-            --secondary-accent-color: #8B4513; /* Marron terre pour les détails subtils */
-            --dark-bg-color: #1C1C1C; /* Fond très sombre */
-            --dark-surface-color: #282828; /* Surfaces des cartes, header, etc. */
-            --text-color-light: #F0F0F0; /* Texte clair sur fond sombre */
-            --text-color-muted: #A8A8A8; /* Texte secondaire/gris */
-            --border-color: #404040; /* Bordures subtiles */
-            --font-body: 'Montserrat', sans-serif;
-            --font-heading: 'Merriweather', serif;
-        }
+        /* Votre CSS reste identique */
+        :root { --primary-accent-color: #DAA520; --secondary-accent-color: #8B4513; --dark-bg-color: #1C1C1C; --dark-surface-color: #282828; --text-color-light: #F0F0F0; --text-color-muted: #A8A8A8; --border-color: #404040; --font-body: 'Montserrat', sans-serif; --font-heading: 'Merriweather', serif; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-body); line-height: 1.7; color: var(--text-color-light); background-color: var(--dark-bg-color); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         a { text-decoration: none; color: var(--primary-accent-color); transition: color 0.3s ease; }
@@ -95,8 +86,6 @@
             .nav-links a::after { display: none; }
             .menu-toggle { display: flex; }
         }
-        /* ... autres règles responsives de votre site ... */
-        /* === FIN DE LA FEUILLE DE STYLE COMPLÈTE === */
     </style>
 </head>
 <body>
@@ -171,12 +160,10 @@
         import re
         from collections import Counter
 
-        # ================== NIVEAU DE SÉCURITÉ 3 : SANITIZATION ROBUSTE ==================
         def sanitize_html(text):
             if not isinstance(text, str):
                 text = str(text)
             return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        # =================================================================================
 
         status_div = document.getElementById("status")
         results_div = document.getElementById("results")
@@ -253,10 +240,12 @@
             const mobileMenu = document.getElementById('mobile-menu');
             const navMenu = document.getElementById('nav-menu');
 
-            mobileMenu.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-            });
+            if(mobileMenu) {
+                mobileMenu.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileMenu.classList.toggle('active');
+                });
+            }
         });
     </script>
 </body>
