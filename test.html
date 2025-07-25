@@ -2,24 +2,259 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Test PyScript</title>
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self'; 
+        script-src 'self' https://pyscript.net 'sha256-7rTRtCUubB7Tcq08vfVYrntsk9Pncq9n6NUDUYFPJ4U='; 
+        style-src 'self' 'unsafe-inline' https://pyscript.net https://fonts.googleapis.com; 
+        font-src https://fonts.gstatic.com;
+        connect-src https://api.allorigins.win;
+        img-src 'self' data:;
+        worker-src blob:;
+    ">
+
+    <title>Alexandre Huberty - Analyseur de Données Python</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+
+    <link 
+        rel="stylesheet" 
+        href="https://pyscript.net/releases/2024.1.1/core.css"
+        integrity="sha384-5iA2yAccWM2GjBq3b3Gj5Y+wH5r/s1QzTucOTlhqD2nQnKqj2v4zC2mGj2Tj5gJw"
+        crossorigin="anonymous">
+    <script 
+        type="module" 
+        src="https://pyscript.net/releases/2024.1.1/core.js"
+        integrity="sha384-5naTsJreUlzrjsvvdqKDsY5TtJy+2MnsVx3u9DpqZTSaDL5svBE6v5menDz08EHw="
+        crossorigin="anonymous"></script>
+    
+    <style>
+        /* Votre CSS reste identique */
+        :root { --primary-accent-color: #DAA520; --secondary-accent-color: #8B4513; --dark-bg-color: #1C1C1C; --dark-surface-color: #282828; --text-color-light: #F0F0F0; --text-color-muted: #A8A8A8; --border-color: #404040; --font-body: 'Montserrat', sans-serif; --font-heading: 'Merriweather', serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); line-height: 1.7; color: var(--text-color-light); background-color: var(--dark-bg-color); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        a { text-decoration: none; color: var(--primary-accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--secondary-accent-color); }
+        ul { list-style: none; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        .main-header { background-color: var(--dark-surface-color); box-shadow: 0 3px 8px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; }
+        .logo { font-family: var(--font-heading); font-size: 2em; color: var(--text-color-light); font-weight: 700; letter-spacing: 0.5px; }
+        .nav-links ul { display: flex; }
+        .nav-links a { color: var(--text-color-light); padding: 8px 16px; transition: color 0.3s ease, transform 0.3s ease; font-weight: 500; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; background-color: var(--primary-accent-color); left: 50%; bottom: 0; transform: translateX(-50%); transition: width 0.3s ease; }
+        .nav-links a:hover::after, .nav-links a.active::after { width: calc(100% - 32px); }
+        .nav-links a:hover { color: var(--primary-accent-color); transform: translateY(-2px); }
+        .menu-toggle { display: none; flex-direction: column; cursor: pointer; z-index: 1001; }
+        .menu-toggle span { height: 2.5px; width: 24px; background-color: var(--text-color-light); margin-bottom: 4px; border-radius: 2px; transition: all 0.3s ease; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+        section { padding: 90px 0; text-align: center; position: relative; overflow: hidden; }
+        section:nth-of-type(even) { background-color: var(--dark-surface-color); }
+        h2 { font-family: var(--font-heading); font-size: 2.8em; color: var(--text-color-light); margin-bottom: 45px; position: relative; display: inline-block; letter-spacing: 0.7px; }
+        h2::after { content: ''; position: absolute; width: 60px; height: 2.5px; background-color: var(--primary-accent-color); bottom: -12px; left: 50%; transform: translateX(-50%); border-radius: 1px; }
+        .btn { display: inline-block; background-color: var(--primary-accent-color); color: var(--dark-bg-color); padding: 12px 28px; border-radius: 4px; transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.3); letter-spacing: 0.5px; border: none; text-transform: uppercase; font-size: 0.95em; cursor:pointer; }
+        .btn:hover { background-color: var(--secondary-accent-color); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
+        .btn:disabled { background-color: #555; color: #888; cursor: not-allowed; }
+        .breadcrumb { background-color: var(--dark-surface-color); padding: 12px 0; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .breadcrumb ul { display: flex; list-style: none; }
+        .breadcrumb li { font-size: 0.9em; color: var(--text-color-muted); display: flex; align-items: center; }
+        .breadcrumb li:not(:last-child)::after { content: '>'; margin: 0 8px; }
+        .breadcrumb a { color: var(--text-color-muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary-accent-color); }
+        .breadcrumb li:last-child a { color: var(--primary-accent-color); pointer-events: none; }
+        .main-footer { background-color: var(--dark-surface-color); color: var(--text-color-muted); text-align: center; padding: 30px 0; font-size: 0.85em; border-top: 1px solid var(--border-color); }
+        .main-footer p { margin-bottom: 10px; }
+        .main-footer .footer-nav ul { display: flex; justify-content: center; gap: 15px; }
+        .main-footer .footer-nav a { color: var(--text-color-muted); transition: color 0.3s ease; }
+        .main-footer .footer-nav a:hover { color: var(--primary-accent-color); }
+        .analyzer-container { max-width: 800px; margin: 0 auto; background-color: var(--dark-surface-color); padding: 40px; border-radius: 8px; box-shadow: 0 5px 18px rgba(0,0,0,0.4); text-align: left; border: 1px solid var(--border-color); }
+        .analyzer-container p { color: var(--text-color-muted); margin-bottom: 25px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .input-group input { flex-grow: 1; padding: 12px; background-color: var(--dark-bg-color); border: 1px solid var(--border-color); border-radius: 4px; font-family: var(--font-body); font-size: 0.95em; color: var(--text-color-light); }
+        #results { margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-color); text-align: left; min-height: 150px; }
+        #results h3 { font-family: var(--font-heading); color: var(--primary-accent-color); }
+        #status { font-style: italic; color: var(--text-color-muted); padding: 15px 0; }
+        #results ul { list-style-position: inside; padding-left: 20px; }
+        @media (max-width: 992px) {
+            .navbar { padding: 12px 20px; }
+            .nav-links ul { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; width: 100%; background-color: var(--dark-surface-color); box-shadow: 0 6px 12px rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); padding: 10px 0; transition: transform 0.3s ease-out; transform: translateY(-100%); }
+            .nav-links.active ul { display: flex; transform: translateY(0); }
+            .nav-links li { width: 100%; }
+            .nav-links a { display: block; padding: 10px 0; text-align: center; border-bottom: 1px solid var(--border-color); }
+            .nav-links a::after { display: none; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
 </head>
-<body style="background-color: #1C1C1C; color: #F0F0F0; font-family: sans-serif; padding: 2em;">
+<body>
+    <header class="main-header">
+        <div class="container navbar">
+            <a href="index.html" class="logo">Mon Portfolio</a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="nav-links" id="nav-menu">
+                <ul>
+                    <li><a href="index.html#hero">Accueil</a></li>
+                    <li><a href="index.html#about">À Propos</a></li>
+                    <li><a href="index.html#skills">Compétences</a></li>
+                    <li><a href="index.html#portfolio">Portfolio</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <h1>Page de Test PyScript</h1>
-    <p>Si PyScript fonctionne, vous devriez voir "Bonjour depuis Python !" écrit ci-dessous :</p>
+    <div class="breadcrumb">
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#portfolio">Portfolio</a></li>
+                <li><a href="#">Analyseur Python</a></li>
+            </ul>
+        </div>
+    </div>
 
-    <div id="output"></div>
+    <main>
+        <section id="analyzer-project">
+            <div class="container">
+                <h2>Analyseur de Données du Marché Freelance</h2>
+                <div class="analyzer-container">
+                    <p>Cet outil interactif utilise Python pour analyser les données de Malt.fr. Entrez un métier et cliquez sur "Analyser" pour voir le tarif journalier et les compétences clés.</p>
+                    <div class="input-group">
+                        <input type="text" id="job-title" placeholder="Ex: Data Analyst, Développeur Web...">
+                        <button id="run-button" class="btn">Analyser</button>
+                    </div>
+                    <div id="status">En attente de votre recherche...</div>
+                    <div id="results"></div>
+                </div>
+            </div>
+        </section>
+    </main>
 
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Alexandre Huberty. Tous droits réservés.</p>
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="index.html#hero">Accueil</a></li>
+                    <li><a href="index.html#portfolio">Portfolio</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <py-config>
+        packages = ["beautifulsoup4"]
+    </py-config>
     <py-script>
-        from pyscript import Element
+        import asyncio
+        # === CORRECTION DES IMPORTS ===
+        from js import document # On utilise l'objet 'document' global de JavaScript
+        from pyodide.ffi import create_proxy
+        # ==============================
+        from pyodide.http import pyfetch
+        from bs4 import BeautifulSoup
+        import re
+        from collections import Counter
+
+        def sanitize_html(text):
+            if not isinstance(text, str): text = str(text)
+            return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+        # === CORRECTION DE LA SÉLECTION DES ÉLÉMENTS ===
+        status_div = document.getElementById("status")
+        results_div = document.getElementById("results")
+        job_input = document.getElementById("job-title")
+        run_button = document.getElementById("run-button")
+        # ===============================================
+
+        async def main(*args, **kwargs):
+            job_title = sanitize_html(job_input.value)
+            if not job_title:
+                status_div.innerText = "Veuillez entrer un métier."
+                return
+
+            run_button.disabled = True
+            status_div.innerText = "Initialisation..."
+            results_div.innerHTML = ""
+            await asyncio.sleep(0.1)
+
+            try:
+                search_query = job_title.replace(" ", "+")
+                malt_url = "https://www.malt.fr/s?q={}".format(search_query)
+                proxy_url = "https://api.allorigins.win/raw?url={}".format(malt_url)
+                status_div.innerText = "Connexion sécurisée au proxy..."
+                response = await pyfetch(url=proxy_url)
+                if response.status != 200:
+                    raise ConnectionError("Le proxy a retourné une erreur {}".format(response.status))
+
+                status_div.innerText = "Analyse du HTML..."
+                html_content = await response.string()
+                soup = BeautifulSoup(html_content, "html.parser")
+                
+                status_div.innerText = "Extraction et nettoyage des données..."
+                prices = []
+                price_elements = soup.select('strong[data-testid="price"]')
+                for el in price_elements:
+                    price_text = re.search(r'(\d+)', el.text)
+                    if price_text:
+                        prices.append(int(price_text.group(1)))
+
+                all_skills = []
+                skill_elements = soup.select('div[data-testid*="expertise-pills-"]')
+                for el in skill_elements:
+                    all_skills.append(sanitize_html(el.text.strip()))
+                
+                status_div.innerText = "Analyse terminée."
+                output_html = "<h3>Résultats pour '{}'</h3>".format(job_title)
+
+                if prices:
+                    average_tjm = sum(prices) / len(prices)
+                    output_html += "<p>Tarif Journalier Moyen : <strong>{:.0f} €</strong></p>".format(average_tjm)
+                else:
+                    output_html += "<p><strong>Aucun tarif trouvé.</strong></p>"
+
+                if all_skills:
+                    top_skills = Counter(all_skills).most_common(5)
+                    output_html += "<p>Top 5 des compétences :</p><ul>"
+                    for skill, count in top_skills:
+                        output_html += "<li>{}</li>".format(skill)
+                    output_html += "</ul>"
+                else:
+                    output_html += "<p><strong>Aucune compétence trouvée.</strong></p>"
+                
+                results_div.innerHTML = output_html
+            except Exception as e:
+                status_div.innerText = "Une erreur est survenue."
+                results_div.innerHTML = "<p style='color:#FF5555;'><strong>Erreur :</strong> Problème de connexion ou de parsing.</p>"
+            finally:
+                run_button.disabled = False
         
-        # Le script le plus simple possible
-        output_div = Element("output")
-        output_div.write("Bonjour depuis Python !")
+        # === CORRECTION DE LA LOGIQUE D'ÉVÉNEMENT ===
+        main_proxy = create_proxy(main)
+        run_button.addEventListener("click", main_proxy)
+        # ============================================
+
     </py-script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navMenu = document.getElementById('nav-menu');
+            if(mobileMenu) {
+                mobileMenu.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
