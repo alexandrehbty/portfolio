@@ -6,12 +6,12 @@
     
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self'; 
-        script-src 'self' https://pyscript.net 'sha256-7rTRtCUubB7Tcq08vfVYrntsk9Pncq9n6NUDUYFPJ4U='; 
+        script-src 'self' https://pyscript.net 'unsafe-eval'; 
         style-src 'self' 'unsafe-inline' https://pyscript.net https://fonts.googleapis.com; 
         font-src https://fonts.gstatic.com;
         connect-src https://api.allorigins.win;
         img-src 'self' data:;
-        worker-src blob:;
+        worker-src 'self' blob:; 
     ">
 
     <title>Alexandre Huberty - Analyseur de Données Python</title>
@@ -128,7 +128,7 @@
                     <p>Cet outil interactif utilise Python pour analyser les données de Malt.fr. Entrez un métier et cliquez sur "Analyser" pour voir le tarif journalier et les compétences clés.</p>
                     <div class="input-group">
                         <input type="text" id="job-title" placeholder="Ex: Data Analyst, Développeur Web...">
-                        <button class="btn" py-click="main">Analyser</button>
+                        <button id="run-button" class="btn">Analyser</button>
                     </div>
                     <div id="status">En attente de votre recherche...</div>
                     <div id="results"></div>
@@ -155,7 +155,8 @@
     </py-config>
     <py-script>
         import asyncio
-        from js import document
+        from pyscript import Element
+        from pyodide.ffi import create_proxy
         from pyodide.http import pyfetch
         from bs4 import BeautifulSoup
         import re
@@ -166,10 +167,11 @@
                 text = str(text)
             return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-        status_div = document.getElementById("status")
-        results_div = document.getElementById("results")
-        job_input = document.getElementById("job-title")
-        run_button = document.querySelector("button[py-click='main']")
+        # Références aux éléments via la méthode Element() de PyScript
+        status_div = Element("status")
+        results_div = Element("results")
+        job_input = Element("job-title")
+        run_button = Element("run-button")
 
         async def main(*args, **kwargs):
             job_title = sanitize_html(job_input.value)
@@ -177,19 +179,19 @@
                 status_div.innerText = "Veuillez entrer un métier."
                 return
 
-            run_button.disabled = True
+            run_button.element.disabled = True
             status_div.innerText = "Initialisation..."
-            results_div.innerHTML = ""
+            results_div.html = ""
             await asyncio.sleep(0.1)
 
             try:
                 search_query = job_title.replace(" ", "+")
-                malt_url = "https://www.malt.fr/s?q={}".format(search_query) # Utilisation de .format()
-                proxy_url = "https://api.allorigins.win/raw?url={}".format(malt_url) # Utilisation de .format()
+                malt_url = "https://www.malt.fr/s?q={}".format(search_query)
+                proxy_url = "https://api.allorigins.win/raw?url={}".format(malt_url)
                 status_div.innerText = "Connexion sécurisée au proxy..."
                 response = await pyfetch(url=proxy_url)
                 if response.status != 200:
-                    raise ConnectionError("Le proxy a retourné une erreur {}".format(response.status)) # Utilisation de .format()
+                    raise ConnectionError("Le proxy a retourné une erreur {}".format(response.status))
 
                 status_div.innerText = "Analyse du HTML..."
                 html_content = await response.string()
@@ -209,7 +211,6 @@
                     all_skills.append(sanitize_html(el.text.strip()))
                 
                 status_div.innerText = "Analyse terminée."
-                # === CORRECTION DU FORMATAGE DE TEXTE ===
                 output_html = "<h3>Résultats pour '{}'</h3>".format(job_title)
 
                 if prices:
@@ -227,14 +228,22 @@
                 else:
                     output_html += "<p><strong>Aucune compétence trouvée.</strong></p>"
                 
-                results_div.innerHTML = output_html
+                results_div.html = output_html
 
             except Exception as e:
                 status_div.innerText = "Une erreur est survenue."
-                results_div.innerHTML = "<p style='color:#FF5555;'><strong>Erreur :</strong> Problème de connexion ou de parsing.</p>"
+                results_div.html = "<p style='color:#FF5555;'><strong>Erreur :</strong> Problème de connexion ou de parsing.</p>"
 
             finally:
-                run_button.disabled = False
+                run_button.element.disabled = False
+        
+        # === CORRECTION DE LA LOGIQUE D'ÉVÉNEMENT ===
+        # On crée un "proxy" pour notre fonction asynchrone
+        main_proxy = create_proxy(main)
+        # On attache l'événement au bouton de manière explicite
+        run_button.element.addEventListener("click", main_proxy)
+        # ============================================
+
     </py-script>
 
     <script>
