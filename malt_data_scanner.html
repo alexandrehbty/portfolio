@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- ================== NIVEAU DE SÉCURITÉ 1 : CONTENT SECURITY POLICY (CSP) ================== -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self'; 
         script-src 'self' https://pyscript.net; 
@@ -12,36 +11,32 @@
         font-src https://fonts.gstatic.com;
         connect-src https://api.allorigins.win;
         img-src 'self' data:;
+        worker-src blob:; 
     ">
-    <!-- ======================================================================================= -->
-
     <title>Alexandre Huberty - Analyseur de Données Python</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- ================== NIVEAU DE SÉCURITÉ 2 : SUBRESOURCE INTEGRITY (SRI) ================== -->
     <link 
         rel="stylesheet" 
         href="https://pyscript.net/releases/2024.1.1/core.css"
-        xintegrity="sha384-5iA2yAccWM2GjBq3b3Gj5Y+wH5r/s1QzTucOTlhqD2nQnKqj2v4zC2mGj2Tj5gJw"
+        integrity="sha384-5iA2yAccWM2GjBq3b3Gj5Y+wH5r/s1QzTucOTlhqD2nQnKqj2v4zC2mGj2Tj5gJw"
         crossorigin="anonymous">
     <script 
         type="module" 
         src="https://pyscript.net/releases/2024.1.1/core.js"
-        xintegrity="sha384-OkQu2sQfPyPS0Ipm5a9E59eW2+2fjpWj22p2hGv4TcF5jC1jPAfP+3sC8M9zDRjH"
+        integrity="sha384-OkQu2sQfPyPS0Ipm5a9E59eW2+2fjpWj22p2hGv4TcF5jC1jPAfP+3sC8M9zDRjH"
         crossorigin="anonymous"></script>
-    <!-- ====================================================================================== -->
-    
     <style>
-        /* CSS complet de votre portfolio pour une intégration parfaite */
+        /* === DÉBUT DE LA FEUILLE DE STYLE COMPLÈTE (COPIÉE DE VOTRE index.html) === */
         :root {
-            --primary-accent-color: #DAA520;
-            --secondary-accent-color: #8B4513;
-            --dark-bg-color: #1C1C1C;
-            --dark-surface-color: #282828;
-            --text-color-light: #F0F0F0;
-            --text-color-muted: #A8A8A8;
-            --border-color: #404040;
+            --primary-accent-color: #DAA520; /* Or antique pour l'accentuation */
+            --secondary-accent-color: #8B4513; /* Marron terre pour les détails subtils */
+            --dark-bg-color: #1C1C1C; /* Fond très sombre */
+            --dark-surface-color: #282828; /* Surfaces des cartes, header, etc. */
+            --text-color-light: #F0F0F0; /* Texte clair sur fond sombre */
+            --text-color-muted: #A8A8A8; /* Texte secondaire/gris */
+            --border-color: #404040; /* Bordures subtiles */
             --font-body: 'Montserrat', sans-serif;
             --font-heading: 'Merriweather', serif;
         }
@@ -100,6 +95,8 @@
             .nav-links a::after { display: none; }
             .menu-toggle { display: flex; }
         }
+        /* ... autres règles responsives de votre site ... */
+        /* === FIN DE LA FEUILLE DE STYLE COMPLÈTE === */
     </style>
 </head>
 <body>
@@ -176,11 +173,6 @@
 
         # ================== NIVEAU DE SÉCURITÉ 3 : SANITIZATION ROBUSTE ==================
         def sanitize_html(text):
-            """
-            Fonction de sécurité critique.
-            Elle nettoie une chaîne de caractères pour empêcher l'exécution de code malveillant (XSS)
-            en remplaçant les caractères HTML par leurs équivalents sécurisés.
-            """
             if not isinstance(text, str):
                 text = str(text)
             return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -192,7 +184,6 @@
         run_button = document.querySelector("button[py-click='main']")
 
         async def main(*args, **kwargs):
-            # On nettoie la saisie de l'utilisateur dès le début
             job_title = sanitize_html(job_input.value)
             if not job_title:
                 status_div.innerText = "Veuillez entrer un métier."
@@ -227,11 +218,9 @@
                 all_skills = []
                 skill_elements = soup.select('div[data-testid*="expertise-pills-"]')
                 for el in skill_elements:
-                    # On nettoie chaque compétence extraite par précaution
                     all_skills.append(sanitize_html(el.text.strip()))
                 
                 status_div.innerText = "Analyse terminée."
-                # On utilise la variable nettoyée 'job_title' pour l'affichage
                 output_html = f"<h3>Résultats pour '{job_title}'</h3>"
 
                 if prices:
@@ -244,7 +233,6 @@
                     top_skills = Counter(all_skills).most_common(5)
                     output_html += "<p>Top 5 des compétences :</p><ul>"
                     for skill, count in top_skills:
-                        # La variable 'skill' a déjà été nettoyée
                         output_html += f"<li>{skill}</li>"
                     output_html += "</ul>"
                 else:
