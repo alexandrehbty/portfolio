@@ -6,14 +6,13 @@
     
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self'; 
-        script-src 'self' https://pyscript.net 'sha256-sa82YFI/oCkzHWRI7n0iDN5hGyiHGBrJxILOcJQ2Tzs='; 
+        script-src 'self' https://pyscript.net https://cdn.jsdelivr.net 'sha256-sa82YFI/oCkzHWRi7n0iDn5hGyiHGBrJxiLoCJQzTzs='; 
         style-src 'self' 'unsafe-inline' https://pyscript.net https://fonts.googleapis.com; 
         font-src https://fonts.gstatic.com;
         connect-src https://api.allorigins.win;
         img-src 'self' data:;
         worker-src blob:;
     ">
-
     <title>Alexandre Huberty - Analyseur de Données Python</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
@@ -21,17 +20,26 @@
     <link 
         rel="stylesheet" 
         href="https://pyscript.net/releases/2024.1.1/core.css"
-        xintegrity="sha384-CVTwnglzq2CtMq51qUWFC7MTxVIN1RJK3496Q72xPQl3MSfgdmhSsjGvvswOKpJ+"
+        integrity="sha384-CVTwnglzq2CtMq51qUWFC7MTxVIN1RJK3496Q72xPQl3MSfgdmhSsjGvvswOKpJ+"
         crossorigin="anonymous">
     <script 
         type="module" 
         src="https://pyscript.net/releases/2024.1.1/core.js"
-        xintegrity="sha384-5naTsJreUlzrjsvvdqKDsY5TtJy+2MnsVx3u9DpqZTSaDL5svBE6v5menDz08EHw="
+        integrity="sha384-5naTsJreUlzrjsvvdqKDsY5TtJy+2MnsVx3u9DpqZTSaDL5svBE6v5menDz08EHw="
         crossorigin="anonymous"></script>
-    
     <style>
-        /* Votre CSS reste identique */
-        :root { --primary-accent-color: #DAA520; --secondary-accent-color: #8B4513; --dark-bg-color: #1C1C1C; --dark-surface-color: #282828; --text-color-light: #F0F0F0; --text-color-muted: #A8A8A8; --border-color: #404040; --font-body: 'Montserrat', sans-serif; --font-heading: 'Merriweather', serif; }
+        /* Votre CSS complet ici */
+        :root {
+            --primary-accent-color: #DAA520;
+            --secondary-accent-color: #8B4513;
+            --dark-bg-color: #1C1C1C;
+            --dark-surface-color: #282828;
+            --text-color-light: #F0F0F0;
+            --text-color-muted: #A8A8A8;
+            --border-color: #404040;
+            --font-body: 'Montserrat', sans-serif;
+            --font-heading: 'Merriweather', serif;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-body); line-height: 1.7; color: var(--text-color-light); background-color: var(--dark-bg-color); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         a { text-decoration: none; color: var(--primary-accent-color); transition: color 0.3s ease; }
@@ -155,10 +163,8 @@
     </py-config>
     <py-script>
         import asyncio
-        # === CORRECTION DES IMPORTS ===
-        from js import document # On utilise l'objet 'document' global de JavaScript
+        from js import document
         from pyodide.ffi import create_proxy
-        # ==============================
         from pyodide.http import pyfetch
         from bs4 import BeautifulSoup
         import re
@@ -168,12 +174,10 @@
             if not isinstance(text, str): text = str(text)
             return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-        # === CORRECTION DE LA SÉLECTION DES ÉLÉMENTS ===
         status_div = document.getElementById("status")
         results_div = document.getElementById("results")
         job_input = document.getElementById("job-title")
         run_button = document.getElementById("run-button")
-        # ===============================================
 
         async def main(*args, **kwargs):
             job_title = sanitize_html(job_input.value)
@@ -237,10 +241,8 @@
             finally:
                 run_button.disabled = False
         
-        # === CORRECTION DE LA LOGIQUE D'ÉVÉNEMENT ===
         main_proxy = create_proxy(main)
         run_button.addEventListener("click", main_proxy)
-        # ============================================
 
     </py-script>
 
