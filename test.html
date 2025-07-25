@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test PyScript</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+</head>
+<body style="background-color: #1C1C1C; color: #F0F0F0; font-family: sans-serif; padding: 2em;">
+
+    <h1>Page de Test PyScript</h1>
+    <p>Si PyScript fonctionne, vous devriez voir "Bonjour depuis Python !" écrit ci-dessous :</p>
+
+    <div id="output"></div>
+
+    <py-script>
+        from pyscript import Element
+        
+        # Le script le plus simple possible
+        output_div = Element("output")
+        output_div.write("Bonjour depuis Python !")
+    </py-script>
+
+</body>
+</html>
