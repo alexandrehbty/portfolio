@@ -13,6 +13,7 @@
         img-src 'self' data:;
         worker-src blob:;
     ">
+
     <title>Alexandre Huberty - Analyseur de Données Python</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
@@ -22,12 +23,12 @@
         href="https://pyscript.net/releases/2024.1.1/core.css"
         integrity="sha384-5iA2yAccWM2GjBq3b3Gj5Y+wH5r/s1QzTucOTlhqD2nQnKqj2v4zC2mGj2Tj5gJw"
         crossorigin="anonymous">
-    
     <script 
         type="module" 
         src="https://pyscript.net/releases/2024.1.1/core.js"
         integrity="sha384-5naTsJreUlzrjsvvdqKDsY5TtJy+2MnsVx3u9DpqZTSaDL5svBE6v5menDz08EHw="
         crossorigin="anonymous"></script>
+    
     <style>
         /* Votre CSS reste identique */
         :root { --primary-accent-color: #DAA520; --secondary-accent-color: #8B4513; --dark-bg-color: #1C1C1C; --dark-surface-color: #282828; --text-color-light: #F0F0F0; --text-color-muted: #A8A8A8; --border-color: #404040; --font-body: 'Montserrat', sans-serif; --font-heading: 'Merriweather', serif; }
@@ -183,12 +184,12 @@
 
             try:
                 search_query = job_title.replace(" ", "+")
-                malt_url = f"https://www.malt.fr/s?q={search_query}"
-                proxy_url = f"https://api.allorigins.win/raw?url={malt_url}"
+                malt_url = "https://www.malt.fr/s?q={}".format(search_query) # Utilisation de .format()
+                proxy_url = "https://api.allorigins.win/raw?url={}".format(malt_url) # Utilisation de .format()
                 status_div.innerText = "Connexion sécurisée au proxy..."
                 response = await pyfetch(url=proxy_url)
                 if response.status != 200:
-                    raise ConnectionError(f"Le proxy a retourné une erreur {response.status}")
+                    raise ConnectionError("Le proxy a retourné une erreur {}".format(response.status)) # Utilisation de .format()
 
                 status_div.innerText = "Analyse du HTML..."
                 html_content = await response.string()
@@ -208,11 +209,12 @@
                     all_skills.append(sanitize_html(el.text.strip()))
                 
                 status_div.innerText = "Analyse terminée."
-                output_html = f"<h3>Résultats pour '{job_title}'</h3>"
+                # === CORRECTION DU FORMATAGE DE TEXTE ===
+                output_html = "<h3>Résultats pour '{}'</h3>".format(job_title)
 
                 if prices:
                     average_tjm = sum(prices) / len(prices)
-                    output_html += f"<p>Tarif Journalier Moyen : <strong>{average_tjm:.0f} €</strong></p>"
+                    output_html += "<p>Tarif Journalier Moyen : <strong>{:.0f} €</strong></p>".format(average_tjm)
                 else:
                     output_html += "<p><strong>Aucun tarif trouvé.</strong></p>"
 
@@ -220,7 +222,7 @@
                     top_skills = Counter(all_skills).most_common(5)
                     output_html += "<p>Top 5 des compétences :</p><ul>"
                     for skill, count in top_skills:
-                        output_html += f"<li>{skill}</li>"
+                        output_html += "<li>{}</li>".format(skill)
                     output_html += "</ul>"
                 else:
                     output_html += "<p><strong>Aucune compétence trouvée.</strong></p>"
@@ -229,7 +231,7 @@
 
             except Exception as e:
                 status_div.innerText = "Une erreur est survenue."
-                results_div.innerHTML = f"<p style='color:#FF5555;'><strong>Erreur :</strong> Problème de connexion ou de parsing.</p>"
+                results_div.innerHTML = "<p style='color:#FF5555;'><strong>Erreur :</strong> Problème de connexion ou de parsing.</p>"
 
             finally:
                 run_button.disabled = False
