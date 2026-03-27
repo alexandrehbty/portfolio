@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexandre Huberty - Mon Portfolio</title>
+    <title>Alexandre Huberty - Archéologue</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Variables CSS pour un contrôle facile du thème */
+        /* --- Variables CSS : Thème "Archéologie / Terre Cuite" --- */
         :root {
-            --primary-accent-color: #DAA520; /* Or antique pour l'accentuation */
-            --secondary-accent-color: #8B4513; /* Marron terre pour les détails subtils */
-            --dark-bg-color: #1C1C1C; /* Fond très sombre */
-            --dark-surface-color: #282828; /* Surfaces des cartes, header, etc. */
-            --text-color-light: #F0F0F0; /* Texte clair sur fond sombre */
-            --text-color-muted: #A8A8A8; /* Texte secondaire/gris */
-            --border-color: #404040; /* Bordures subtiles */
+            --primary-accent-color: #CD853F; /* Terre Cuite / Bronze (Peru) */
+            --secondary-accent-color: #8B4513; /* Terre d'Ombre (SaddleBrown) */
+            
+            --dark-bg-color: #1C1C1C;
+            --dark-surface-color: #282828;
+            --text-color-light: #F0F0F0;
+            --text-color-muted: #A8A8A8;
+            --border-color: #404040;
             --font-body: 'Montserrat', sans-serif;
-            --font-heading: 'Merriweather', serif;
+            --font-heading: 'Merriweather', serif; /* Parfait pour le côté académique/historique */
         }
 
-        /* Réinitialisation de base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Réinitialisation */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-body);
@@ -33,30 +30,19 @@
             background-color: var(--dark-bg-color);
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        a {
-            text-decoration: none;
-            color: var(--primary-accent-color);
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: var(--secondary-accent-color);
-        }
-
-        ul {
-            list-style: none;
-        }
+        a { text-decoration: none; color: var(--primary-accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--secondary-accent-color); }
+        ul { list-style: none; }
 
         .container {
-            max-width: 1100px; /* Légèrement plus étroit pour un look plus dense */
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* --- Header / Navigation --- */
+        /* --- Header --- */
         .main-header {
             background-color: var(--dark-surface-color);
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
@@ -68,9 +54,9 @@
 
         .navbar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: center; /* justify-content: space-between a été retiré */
             padding: 16px 0;
+            position: relative; /* Ajouté pour positionner le menu déroulant */
         }
 
         .logo {
@@ -79,49 +65,61 @@
             color: var(--text-color-light);
             font-weight: 700;
             letter-spacing: 0.5px;
+            margin-right: auto; /* Pousse le bouton hamburger complètement à droite */
         }
 
+        /* --- Menu Hamburger - Style Vignette Animée --- */
         .nav-links ul {
             display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: calc(100% + 10px); /* Positionné légèrement en dessous du header */
+            right: 20px; /* Aligné avec le bouton hamburger */
+            width: 220px; /* Largeur fixe de la vignette */
+            background-color: var(--dark-surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px; /* Bords bien arrondis */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            padding: 8px 0;
+            z-index: 1000;
+            
+            /* Animation : caché et décalé vers le haut par défaut */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-links.active ul {
+            /* Animation : rendu visible et ramené à sa position initiale */
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
         .nav-links a {
             color: var(--text-color-light);
-            padding: 8px 16px;
-            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
             font-weight: 500;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary-accent-color);
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: calc(100% - 32px);
+            display: block;
+            text-align: left; /* Alignement propre pour une vignette */
         }
 
         .nav-links a:hover {
             color: var(--primary-accent-color);
-            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.05); /* Léger fond au survol */
+            padding-left: 32px; /* Effet de décalage dynamique au survol */
         }
 
+        /* Bouton Hamburger */
         .menu-toggle {
-            display: none;
+            display: flex; /* Toujours visible maintenant */
             flex-direction: column;
             cursor: pointer;
             z-index: 1001;
+            padding: 5px;
         }
-
         .menu-toggle span {
             height: 2.5px;
             width: 24px;
@@ -130,20 +128,14 @@
             border-radius: 2px;
             transition: all 0.3s ease;
         }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
 
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(4px, 4px);
-        }
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(4px, -4px);
-        }
-
-        /* --- Hero Section --- */
+        /* --- Hero --- */
         #hero {
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('https://via.placeholder.com/1600x900/2a2a2a/EBEBEB?text=Votre+Image+de+Fond') no-repeat center center/cover;
+            /* Image de fond évocatrice (placeholder) */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1600x900/2a2a2a/CD853F?text=Site+Archeologique+Fond') no-repeat center center/cover;
             color: var(--text-color-light);
             text-align: center;
             padding: 100px 20px;
@@ -152,23 +144,16 @@
             justify-content: center;
             align-items: center;
             min-height: 80vh;
-            position: relative;
-            overflow: hidden;
-            background-attachment: fixed; /* Effet Parallax */
+            background-attachment: fixed;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-        }
+        .hero-content { z-index: 2; max-width: 800px; }
 
         .hero-content h1 {
             font-family: var(--font-heading);
             font-size: 3.8em;
             margin-bottom: 12px;
             text-shadow: 0 3px 8px rgba(0,0,0,0.5);
-            letter-spacing: 0.8px;
         }
 
         .hero-content p {
@@ -178,38 +163,77 @@
             font-weight: 300;
         }
 
+        /* --- Boutons (Avec SHINE Effect) --- */
         .btn {
             display: inline-block;
             background-color: var(--primary-accent-color);
-            color: var(--dark-bg-color);
+            color: #1C1C1C; /* Texte sombre sur le bouton terre cuite */
             padding: 12px 28px;
-            border-radius: 4px; /* Carré ou légèrement arrondi */
-            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 4px;
+            transition: all 0.3s ease;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             letter-spacing: 0.5px;
             border: none;
             text-transform: uppercase;
             font-size: 0.95em;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: all 0.6s ease-in-out;
+            z-index: -1;
+        }
+
+        .btn:hover::before { left: 100%; }
 
         .btn:hover {
             background-color: var(--secondary-accent-color);
+            color: #FFFFFF; /* Texte blanc au survol sur fond sombre */
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
 
-        /* --- Sections Générales --- */
-        section {
-            padding: 90px 0;
-            text-align: center;
+        .btn-small {
+            margin-top: 12px;
+            padding: 8px 18px;
+            font-size: 0.8em;
+            border-radius: 3px;
+            display: inline-block;
+            background-color: var(--primary-accent-color);
+            color: #1C1C1C;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
             position: relative;
             overflow: hidden;
+            z-index: 1;
+            align-self: flex-start;
+        }
+        .btn-small::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: all 0.6s ease-in-out; z-index: -1;
+        }
+        .btn-small:hover::before { left: 100%; }
+        .btn-small:hover {
+            background-color: var(--secondary-accent-color);
+            color: #FFFFFF;
+            transform: translateY(-2px);
         }
 
-        section:nth-of-type(even) {
-            background-color: var(--dark-surface-color);
-        }
+        /* --- Sections --- */
+        section { padding: 90px 0; text-align: center; }
+        section:nth-of-type(even) { background-color: var(--dark-surface-color); }
 
         h2 {
             font-family: var(--font-heading);
@@ -218,17 +242,13 @@
             margin-bottom: 45px;
             position: relative;
             display: inline-block;
-            letter-spacing: 0.7px;
         }
-
         h2::after {
             content: '';
             position: absolute;
-            width: 60px;
-            height: 2.5px;
+            width: 60px; height: 2.5px;
             background-color: var(--primary-accent-color);
-            bottom: -12px;
-            left: 50%;
+            bottom: -12px; left: 50%;
             transform: translateX(-50%);
             border-radius: 1px;
         }
@@ -242,41 +262,33 @@
             max-width: 800px;
             margin: 0 auto;
         }
-
         #about .profile-img {
-            width: 180px;
-            height: 180px;
+            width: 180px; height: 180px;
             border-radius: 50%;
             object-fit: cover;
             border: 4px solid var(--primary-accent-color);
-            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2), 0 6px 15px rgba(0,0,0,0.3);
+            /* Ombre ajustée à la couleur Terre Cuite (205, 133, 63) */
+            box-shadow: 0 0 0 3px rgba(205, 133, 63, 0.2), 0 6px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
         }
-        #about .profile-img:hover {
-            transform: scale(1.03);
-        }
+        #about .profile-img:hover { transform: scale(1.03); }
+        #about .about-text { text-align: left; color: var(--text-color-muted); max-width: 700px; }
+        #about .about-text p:not(:last-child) { margin-bottom: 15px; }
 
-        #about .about-text {
-            text-align: left;
-            font-size: 1em;
-            line-height: 1.8;
-            color: var(--text-color-muted);
-            max-width: 700px;
-        }
-        
-        #about .about-text p:not(:last-child) {
-            margin-bottom: 15px;
-        }
-
-        /* --- Compétences --- */
-        #skills .skills-grid {
+        /* --- Grids --- */
+        /* Grille unifiée pour Compétences, Chantiers et Travaux */
+        #skills .skills-grid,
+        #competences-numeriques .skills-grid,
+        #portfolio .portfolio-grid,
+        #travaux .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
+        /* Style spécifique pour les cartes de compétences (Detailed) */
         .skill-item {
             background-color: var(--dark-surface-color);
             padding: 25px;
@@ -289,42 +301,23 @@
             justify-content: center;
             text-align: center;
             border: 1px solid var(--border-color);
+            min-height: 250px;
         }
-
         .skill-item:hover {
             transform: translateY(-6px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             border-color: var(--primary-accent-color);
         }
+        .skill-item img { width: 60px; height: 60px; margin-bottom: 15px; }
+        .skill-item h3 { font-size: 1.4em; color: var(--text-color-light); margin-bottom: 10px; font-weight: 500; }
+        .skill-item p { color: var(--text-color-muted); font-size: 0.95em; line-height: 1.5; }
 
-        .skill-item img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 15px;
-            /* Pas de filtre ici pour conserver les couleurs originales des logos */
+        /* Inversion des couleurs pour les compétences numériques (Vignettes noires sur fond gris) */
+        #competences-numeriques .skill-item {
+            background-color: var(--dark-bg-color);
         }
 
-        .skill-item h3 {
-            font-size: 1.4em;
-            color: var(--text-color-light);
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-
-        .skill-item p {
-            color: var(--text-color-muted);
-            font-size: 0.9em;
-        }
-
-        /* --- Portfolio --- */
-        #portfolio .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
+        /* Style pour les cartes Portfolio & Travaux */
         .portfolio-item {
             background-color: var(--dark-surface-color);
             border-radius: 8px;
@@ -332,6 +325,8 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
         }
 
         .portfolio-item:hover {
@@ -341,49 +336,28 @@
         }
 
         .portfolio-item img {
-            width: 100%;
-            height: 200px;
+            width: 100%; height: 200px;
             object-fit: contain;
             display: block;
             transition: transform 0.3s ease;
+            background-color: #000;
         }
-        .portfolio-item:hover img {
-            transform: scale(1.02);
-        }
+        .portfolio-item:hover img { transform: scale(1.02); }
 
         .portfolio-info {
             padding: 22px;
             text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
-
-        .portfolio-info h3 {
-            font-size: 1.6em;
-            color: var(--text-color-light);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .portfolio-info p {
-            color: var(--text-color-muted);
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-
-        .portfolio-info .tags {
-            font-size: 0.8em;
-            color: var(--primary-accent-color);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .portfolio-info .btn-small {
-            margin-top: 12px;
-            padding: 8px 18px;
-            font-size: 0.8em;
-            border-radius: 3px;
-        }
+        .portfolio-info h3 { font-size: 1.6em; color: var(--text-color-light); margin-bottom: 8px; font-weight: 500; }
+        .portfolio-info p { color: var(--text-color-muted); font-size: 0.9em; margin-bottom: 15px; flex-grow: 1; }
+        .portfolio-info .tags { font-size: 0.8em; color: var(--primary-accent-color); font-weight: 500; margin-bottom: 10px; display: block; flex-grow: 0; }
 
         /* --- Contact --- */
+        #contact-btn-container { margin-bottom: 30px; }
+
         #contact .contact-form {
             max-width: 700px;
             margin: 0 auto;
@@ -393,290 +367,95 @@
             box-shadow: 0 5px 18px rgba(0,0,0,0.4);
             text-align: left;
             border: 1px solid var(--border-color);
-            display: none
+            display: none; /* Caché par défaut */
+            animation: fadeIn 0.5s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        #contact .form-group {
-            margin-bottom: 20px;
-        }
-
-        #contact label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: var(--text-color-light);
-            font-size: 1em;
-        }
-
-        #contact input[type="text"],
-        #contact input[type="email"],
-        #contact textarea {
-            width: 100%;
-            padding: 12px;
+        #contact .form-group { margin-bottom: 20px; }
+        #contact label { display: block; margin-bottom: 6px; font-weight: 500; }
+        
+        #contact input, #contact textarea {
+            width: 100%; padding: 12px;
             background-color: var(--dark-bg-color);
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-family: var(--font-body);
-            font-size: 0.95em;
             color: var(--text-color-light);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: var(--font-body);
         }
-
-        #contact input[type="text"]:focus,
-        #contact input[type="email"]:focus,
-        #contact textarea:focus {
+        #contact input:focus, #contact textarea:focus {
             outline: none;
             border-color: var(--primary-accent-color);
-            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+            box-shadow: 0 0 0 3px rgba(205, 133, 63, 0.2);
         }
 
-        #contact textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        #contact button {
-            display: block;
-            width: 100%;
-            padding: 15px;
+        #contact button[type="submit"] {
+            display: block; width: 100%; padding: 15px;
             background-color: var(--primary-accent-color);
-            color: var(--dark-bg-color);
-            border: none;
-            border-radius: 4px;
-            font-size: 1.05em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            letter-spacing: 0.8px;
+            color: #1C1C1C;
+            border: none; border-radius: 4px;
+            font-size: 1.05em; font-weight: 600; cursor: pointer;
             text-transform: uppercase;
+            transition: all 0.3s ease;
         }
-
-        #contact button:hover {
+        #contact button[type="submit"]:hover {
             background-color: var(--secondary-accent-color);
+            color: #FFFFFF;
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
 
+        /* Social Icons */
         .social-links {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 18px;
+            margin-top: 50px;
+            display: flex; justify-content: center; gap: 50px;
+        }
+        .social-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 55px; height: 55px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            color: var(--text-color-muted);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .social-btn svg { width: 24px; height: 24px; fill: currentColor; }
+        .social-btn:hover {
+            border-color: var(--primary-accent-color);
+            background-color: rgba(205, 133, 63, 0.1);
+            color: var(--primary-accent-color);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(205, 133, 63, 0.3);
         }
 
-        .social-links a {
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        .social-links a:hover {
-            transform: translateY(-5px);
-        }
-        .social-links img {
-            width: 38px;
-            height: 38px;
-            /* Pas de filtre ici pour conserver les couleurs originales des logos */
-        }
-
-
-        /* --- Footer --- */
+        /* Footer */
         .main-footer {
-            background-color: var(--dark-surface-color);
+            background-color: var(--dark-bg-color);
             color: var(--text-color-muted);
             text-align: center;
             padding: 30px 0;
-            font-size: 0.85em;
             border-top: 1px solid var(--border-color);
         }
+        .main-footer .footer-nav ul { display: flex; justify-content: center; gap: 15px; }
+        .main-footer a { color: var(--text-color-muted); transition: color 0.3s ease; }
+        .main-footer a:hover { color: var(--primary-accent-color); }
 
-        .main-footer p {
-            margin-bottom: 10px;
-        }
-
-        .main-footer .footer-nav ul {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .main-footer .footer-nav a {
-            color: var(--text-color-muted);
-            transition: color 0.3s ease;
-        }
-
-        .main-footer .footer-nav a:hover {
-            color: var(--primary-accent-color);
-        }
-
-        /* --- Responsive Design --- */
         @media (max-width: 992px) {
-            .navbar {
-                padding: 12px 20px;
-            }
-            .nav-links ul {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 64px; /* Hauteur du header */
-                left: 0;
-                width: 100%;
-                background-color: var(--dark-surface-color);
-                box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-                border-top: 1px solid var(--border-color);
-                padding: 10px 0;
-                transition: transform 0.3s ease-out;
-                transform: translateY(-100%);
-            }
-
-            .nav-links.active ul {
-                display: flex;
-                transform: translateY(0);
-            }
-
-            .nav-links li {
-                width: 100%;
-            }
-
-            .nav-links a {
-                display: block;
-                padding: 10px 0;
-                text-align: center;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .nav-links a::after {
-                display: none;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
-
-            #hero {
-                padding: 80px 15px;
-                min-height: 70vh;
-            }
-            .hero-content h1 {
-                font-size: 3em;
-            }
-            .hero-content p {
-                font-size: 1.1em;
-            }
-
-            h2 {
-                font-size: 2.4em;
-            }
-
-            #about .about-content {
-                gap: 25px;
-            }
-
-            #skills .skills-grid,
-            #portfolio .portfolio-grid {
-                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            }
-            .contact-form {
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5em;
-            }
-            .hero-content p {
-                font-size: 1em;
-            }
-            h2 {
-                font-size: 2em;
-            }
-            .skill-item, .portfolio-item {
-                padding: 20px;
-            }
-            .portfolio-info h3 {
-                font-size: 1.4em;
-            }
-            .contact-form {
-                padding: 25px 15px;
-            }
-            .social-links {
-                gap: 12px;
-            }
-            .social-links img {
-                width: 32px;
-                height: 32px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.6em;
-            }
-            .hero-content h1 {
-                font-size: 2em;
-            }
-            .hero-content p {
-                font-size: 0.9em;
-            }
-            h2 {
-                font-size: 1.7em;
-                margin-bottom: 20px;
-            }
-            h2::after {
-                width: 35px;
-                bottom: -10px;
-            }
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.8em;
-            }
-            section {
-                padding: 40px 0;
-            }
-            #skills .skills-grid,
-            #portfolio .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-            .skill-item h3 {
-                font-size: 1.2em;
-            }
-            .portfolio-info h3 {
-                font-size: 1.2em;
-            }
-            #contact label {
-                font-size: 0.9em;
-            }
-            #contact input, #contact textarea {
-                padding: 10px;
-            }
-            #contact button {
-                padding: 12px;
-                font-size: 0.9em;
-            }
-            .main-footer p {
-                font-size: 0.75em;
-            }
-            .main-footer .footer-nav ul {
-                flex-direction: column;
-                gap: 6px;
-            }
+            /* Le menu reste en mode "vignette" même sur mobile, on retire les styles qui le forçaient à 100% de largeur */
+            #skills .skills-grid, #competences-numeriques .skills-grid, #portfolio .portfolio-grid, #travaux .portfolio-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
         }
     </style>
 </head>
 <body>
     <header class="main-header">
         <div class="container navbar">
-            <a href="#" class="logo">Mon Portfolio</a>
-            <div class="menu-toggle" id="mobile-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <a href="#" class="logo">Archéo-Portfolio</a>
+            <div class="menu-toggle" id="mobile-menu"><span></span><span></span><span></span></div>
             <nav class="nav-links" id="nav-menu">
                 <ul>
                     <li><a href="#hero">Accueil</a></li>
                     <li><a href="#about">À Propos</a></li>
-                    <li><a href="#skills">Compétences</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#skills">Méthodes</a></li>
+                    <li><a href="#travaux">Projets & Recherches</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -687,8 +466,8 @@
         <section id="hero">
             <div class="hero-content">
                 <h1>Alexandre Huberty</h1>
-                <p>Développeur Créatif | Analyse de Données | E-commerce </p>
-                <a href="#portfolio" class="btn">Découvrir mes Projets</a>
+                <p>Archéologie | Développement Informatique | Analyse de Données</p>
+                <a href="#travaux" class="btn">Voir mes projets & recherches</a>
             </div>
         </section>
 
@@ -696,11 +475,10 @@
             <div class="container">
                 <h2>À Propos de Moi</h2>
                 <div class="about-content">
-                    <img src="assets/img/Votre texte de paragraphe.png" alt="Votre photo de profil" class="profile-img">
+                    <!-- Image de profil archéologique -->
+                    <img src="assets/img/Votre texte de paragraphe.png" alt="Photo Profil" class="profile-img">
                     <div class="about-text">
-                        <p>Passionné par le digital et l'e-commerce, j'aime transformer les idées en produits fonctionnels et esthétiques qui offrent une expérience utilisateur agréable. J'ai aussi un grand intérêt pour la communication digitale et la gestion des réseaux sociaux.</p>
-                        <p>Mon approche est guidée par l'analyse des données et l'optimisation d'une expérience utilisateur adapté.</p>
-                        <p>Parcourez mes réalisations et n'hésitez pas à me contacter pour toute collaboration ou question !</p>
+                        <p>Passionné par l'histoire matérielle et les civilisations anciennes, je consacre mon travail à la compréhension des sociétés passées à travers leurs vestiges. Mon approche combine rigueur scientifique et analyses numériques.</p>
                     </div>
                 </div>
             </div>
@@ -708,162 +486,134 @@
 
         <section id="skills">
             <div class="container">
-                <h2>Mes Compétences</h2>
+                <h2>Méthodes & Compétences</h2>
                 <div class="skills-grid">
                     <div class="skill-item">
-                        <img src="assets/img/logo_html5.png" alt="HTML5">
-                        <h3>HTML5</h3>
-                        <p>Maîtrise des standards web et sémantique.</p>
+                        <!-- Remplacement des logos de code par des concepts archéo (utilisant des placeholders d'images ou icones génériques) -->
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/layers.png" alt="Stratigraphie">
+                        <h3>Stratigraphie</h3>
+                        <p>Maîtrise de la lecture stratigraphique et enregistrement des unités stratigraphiques (US).</p>
                     </div>
                     <div class="skill-item">
-                        <img src="assets/img/logo_css3.svg" alt="CSS3">
-                        <h3>CSS3</h3>
-                        <p>Stylisation avancée et responsive design.</p>
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/map-marker.png" alt="SIG">
+                        <h3>S.I.G.</h3>
+                        <p>Utilisation de QGIS et ArcGIS pour la cartographie et l'analyse spatiale des données.</p>
                     </div>
                     <div class="skill-item">
-                        <img src="assets/img/logo_java_script.png" alt="JavaScript">
-                        <h3>JavaScript</h3>
-                        <p>Développement interactif et dynamique.</p>
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/camera.png" alt="Photogrammétrie">
+                        <h3>Photogrammétrie</h3>
+                        <p>Relevés 3D de structures et d'objets, modélisation et orthophotographie.</p>
                     </div>
                     <div class="skill-item">
-                        <img src="assets/img/logo_Python_portfolio.svg" alt="Python">
-                        <h3>Python</h3>
-                        <p>Développement backend et scripts.</p>
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/greek-vase.png" alt="Céramologie">
+                        <h3>Céramologie</h3>
+                        <p>Étude, classification et datation des mobiliers céramiques (Antiquité/Moyen-Âge).</p>
                     </div>
                     <div class="skill-item">
-                        <img src="assets/img/logo_google_analytics_2.png" alt="Google Analytics">
-                        <h3>Google Analytics</h3>
-                        <p>Configuration et analyse de données web.</p>
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/document.png" alt="Rapports">
+                        <h3>Rédaction</h3>
+                        <p>Rédaction de rapports finaux d'opération (RFO) et publications scientifiques.</p>
                     </div>
                     <div class="skill-item">
-                        <img src="assets/img/logo_google_ads_2.png" alt="Google Ads">
-                        <h3>Google Ads</h3>
-                        <p>Optimisation et gestion de campagnes publicitaires en ligne.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_looker_studio_2.svg" alt="Looker Studio">
-                        <h3>Looker Studio</h3>
-                        <p>Création de tableaux de bord et analyse de données.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_google_gemini.png" alt="Gemini">
-                        <h3>Gemini</h3>
-                        <p>Utilisation pour prototypage, wireframing et IA générative.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_microsoft_365.svg" alt="Microsoft Office 365">
-                        <h3>Microsoft Office 365</h3>
-                        <p>Maîtrise des outils collaboratifs et bureautiques.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_shopify.png" alt="Shopify">
-                        <h3>Shopify</h3>
-                        <p>Mise en place et gestion de boutiques en ligne.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_adobe_photoshop.png" alt="Photoshop">
-                        <h3>Photoshop</h3>
-                        <p>Retouche photo, création graphique et UI/UX design.</p>
-                    </div>
-                    <div class="skill-item">
-                        <img src="assets/img/logo_adobe_premiere_pro.png" alt="Première Pro">
-                        <h3>Première Pro</h3>
-                        <p>Montage vidéo et post-production.</p>
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/survey.png" alt="Dessin">
+                        <h3>Dessin Technique</h3>
+                        <p>Dessin technique de mobilier et relevés de terrain (coupes, plans).</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="portfolio">
+        <!-- SECTION : Compétences Numériques -->
+        <section id="competences-numeriques">
             <div class="container">
-                <h2>Mes Projets</h2>
+                <h2>Compétences Numériques</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/python.png" alt="Python">
+                        <h3>Python</h3>
+                        <p>Analyse de données spatiales et traitement automatisé de datasets archéologiques.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/javascript.png" alt="JavaScript">
+                        <h3>JavaScript</h3>
+                        <p>Développement web pour la valorisation du patrimoine et la cartographie interactive.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/r-project.png" alt="R">
+                        <h3>R</h3>
+                        <p>Traitements statistiques appliqués au mobilier et modélisation des découvertes.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/map.png" alt="ArcGis Pro">
+                        <h3>ArcGis Pro</h3>
+                        <p>Analyses spatiales avancées, télédétection et gestion professionnelle des SIG.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/artificial-intelligence.png" alt="Gemini">
+                        <h3>Gemini</h3>
+                        <p>Assistance par l'IA générative pour l'analyse documentaire et l'aide à la recherche.</p>
+                    </div>
+                    <div class="skill-item">
+                        <img src="https://img.icons8.com/ios-filled/100/CD853F/bar-chart.png" alt="Power Bi">
+                        <h3>Power Bi</h3>
+                        <p>Visualisation des données de fouilles et création de tableaux de bord interactifs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION : PROJETS & RECHERCHES -->
+        <section id="travaux">
+            <div class="container">
+                <h2>Projets & Recherches</h2>
                 <div class="portfolio-grid">
                     <div class="portfolio-item">
-                        <img src="assets/img/logo_vayler_4.png" alt="Projet 1">
+                        <img src="https://via.placeholder.com/400x300/1a1a1a/CD853F?text=Anthropodyssee" alt="Projet Anthropodyssée">
                         <div class="portfolio-info">
-                            <h3>Vayler sneakers</h3>
-                            <p>Développement de la marque de sneakers Vayler. Conception et réalisation d'un site e-commerce complet avec une architecture front-end.​</p>
-                            <p class="tags"> #Vayler #VaylerSneakers</p>
-                            <a href="https://alexandrehbty.github.io/vayler/" class="btn btn-small">Voir le projet</a>
+                            <h3>Anthropodyssée</h3>
+                            <p>Un globe interactif en WebGL retraçant notre rapport à l'océan dans le temps et l'espace. Une exploration interactive de l'évolution de la conscience maritime à travers 15 chefs-d'œuvre mondiaux et cinq époques décisives.</p>
+                            <p class="tags">#Anthropologie #BlueHumanities #WebGL #InteractiveDesign #ThreeJS</p>
+                            <a href="https://alexandrehbty.github.io/anthropodyssee/" class="btn-small">Voir le projet</a>
                         </div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="assets/img/logo_cybertek.png" alt="Projet 2">
-                        <div class="portfolio-info">
-                            <h3>Analyse des données de Cybertek.fr</h3>
-                            <p>Analyse des performances marketing du site Cybertek.fr et création d'un rapport pour le mois de novembre et de décembre 2023.</p>
-                            <p class="tags">#Cybertek #Data #KPIs</p>
-                            <a href="mon_projet_2_cybertek_data_viz.html" class="btn btn-small">Voir le projet</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-item">
-                        <img src="assets/img/logo_ia_web_analyzer_light.png" alt="Projet 3">
-                        <div class="portfolio-info">
-                            <h3>Outils d'analyse Web</h3>
-                            <p>Un outil d'analyse web léger et performant qui utilise l'IA de Google pour évaluer la structure, les technologies et le SEO technique de n'importe quel site web (à l'exception de ceux ayant une sécurité anti-bot).</p>
-                            <p class="tags">#WebScraping #GeminiAPI #Python #SEOtools</p>
-                            <a href="https://ia-web-analyzer-light.onrender.com" class="btn btn-small">Voir le projet</a>
-                        </div>
-                    </div>
-                    <div class="portfolio-item">
-                        <img src="assets/img/search_book_bar.png" alt="Projet 4">
+                        <img src="https://via.placeholder.com/400x300/1a1a1a/CD853F?text=Moteur+Recherche+Livre" alt="Projet Moteur de Recherche">
                         <div class="portfolio-info">
                             <h3>Moteur de Recherche de Livre</h3>
                             <p>Utilisez ce moteur de recherche conçu avec python pour trouver des livres par titre, auteur ou sujet, et découvrez des informations détaillées.</p>
                             <p class="tags">#Littérature #Data #Searchbar</p>
-                            <a href="https://portfolio-moteur-livres.onrender.com" class="btn btn-small">Voir le projet</a>
+                            <a href="https://portfolio-moteur-livres.onrender.com" class="btn-small">Consulter</a>
                         </div>
                     </div>
                     <div class="portfolio-item">
-                        <img src="assets/img/icone_meteo_weather_dashboard.png" alt="Projet 5">
+                        <img src="https://via.placeholder.com/400x300/1a1a1a/CD853F?text=Application+Meteo" alt="Projet Application Météo">
                         <div class="portfolio-info">
                             <h3>Application Météo</h3>
-                            <p>Application météo backend-oriented démontrant une architecture résiliente. Elle intègre un algorithme adaptatif inspiré de Jacobson/Karn pour ajuster dynamiquement les timeouts réseau en fonction de la congestion, garantissant stabilité et performance sur une infrastructure cloud contrainte. </p>
+                            <p>Application météo backend-oriented démontrant une architecture résiliente. Elle intègre un algorithme adaptatif type Jacobson/Karn pour ajuster dynamiquement les timeouts réseau en fonction de la congestion, garantissant stabilité et performance sur une infrastructure cloud contrainte.</p>
                             <p class="tags">#Météo #OpenWeather #Backend #Flask #Cloud #JacobsonKarn</p>
-                            <a href="https://weather-dashboard-c7gh.onrender.com" class="btn btn-small">Voir le projet</a>
+                            <a href="https://weather-dashboard-c7gh.onrender.com" class="btn-small">Consulter</a>
                         </div>
                     </div>
-                    <div class="portfolio-item">
-                        <img src="assets/img/logo_travail_en_cours.png" alt="Projet N°6">
-                        <div class="portfolio-info">
-                            <h3>Projet n°5</h3>
-                            <p>Projet n°5 : Actuellement en phase de conception. Un nouveau défi stimulant dont les détails seront révélés très prochainement.</p>
-                            <p class="tags">#surprise #endéveloppement #skin...</p>
-                            <a href="#" class="btn btn-small">Voir le projet</a>
-                        </div>
-                    </div>
-                    </div>
+                </div>
             </div>
         </section>
 
         <section id="contact">
             <div class="container">
                 <h2>Me Contacter</h2>
-                <form class="contact-form" action="#" method="POST">
-                    <div class="form-group">
-                        <label for="name">Nom Complet</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Adresse Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Sujet</label>
-                        <input type="text" id="subject" name="subject">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Votre Message</label>
-                        <textarea id="message" name="message" required></textarea>
-                    </div>
-                    <button type="submit">Envoyer le Message</button>
-                </form>
-                <div class="social-links">
-                    <a href="https://www.linkedin.com/in/alexandre-huberty" target="_blank" aria-label="LinkedIn">
-                        <img src="https://img.icons8.com/color/40/000000/linkedin.png" alt="LinkedIn">
+                
+                <!-- Logos avec ESPACE AGRANDI -->
+                <div class="social-links" style="margin-top: 20px;">
+                    <!-- Nouveau bouton Email -->
+                    <a href="mailto:votre.adresse@email.com" aria-label="Email" class="social-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
                     </a>
-                    <a href="https://github.com/alexandrehbty" target="_blank" aria-label="GitHub">
-                        <img src="https://img.icons8.com/ios-filled/40/000000/github.png" alt="GitHub">
+                    <a href="https://www.linkedin.com/in/alexandre-huberty" target="_blank" aria-label="LinkedIn" class="social-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <!-- Gardé l'icone GitHub (peut servir pour les projets de code archéo/python) ou peut être vu comme un lien vers Academia/ResearchGate -->
+                    <a href="https://github.com/alexandrehbty" target="_blank" aria-label="GitHub/Research" class="social-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     </a>
                 </div>
             </div>
@@ -872,14 +622,7 @@
 
     <footer class="main-footer">
         <div class="container">
-            <p>&copy; © 2026 Alexandre Huberty. Tous droits réservés.</p>
-            <nav class="footer-nav">
-                <ul>
-                    <li><a href="#hero">Accueil</a></li>
-                    <li><a href="#portfolio">Portfolio</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+            <p>&copy; 2026 Alexandre Huberty. Tous droits réservés.</p>
         </div>
     </footer>
 
